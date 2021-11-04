@@ -8,7 +8,7 @@ import youtube_dl
 class download_config():
     """ Configuration for the Download Parameters """
 
-    input_file = 'test_file.csv'    # Input .csv file location
+    input_file = 'Short_Circuit.csv'    # Input .csv file location
 
     start_point = 0                 # Selects the download start point. Replace `0` with the exact line number from the .csv file for the download that you want to start with. 
     # (Default Value: 0 - Starts at the start of the .csv file)
