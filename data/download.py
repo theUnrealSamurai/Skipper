@@ -36,8 +36,7 @@ class download_config():
 
         start_point = download_config.start_point
 
-        if start_point == 0: 
-            start_point = 0
+        if start_point == 0: pass
         elif start_point > 1 and start_point < (len(df)+2):
             start_point-=2
         else: 
