@@ -8,12 +8,12 @@ import youtube_dl
 class download_config():
     """ Configuration for the Download Parameters """
 
-    input_file = 'Short_Circuit.csv'    # Input .csv file location
+    input_file = 'Short_Circuit.csv'        # Input .csv file location
 
-    start_point = 0                 # Selects the download start point. Replace `0` with the exact line number from the .csv file for the download that you want to start with. 
+    start_point = 0                         # Selects the download start point. Replace `0` with the exact line number from the .csv file for the download that you want to start with. 
     # (Default Value: 0 - Starts at the start of the .csv file)
 
-    stop_point = None               # Selects the download end point. Replace `None` with the exact line number from the .csv file for the download that you want to end with. 
+    stop_point = None                       # Selects the download end point. Replace `None` with the exact line number from the .csv file for the download that you want to end with. 
     # (Default Value: None - Stops at the end of the values in the .csv file)
     
     # YouTubeDL Download Options
@@ -25,6 +25,7 @@ class download_config():
             'nopostoverwrites': True,
         }],
         'outtmpl': f'train/%(title)s - %(id)s.%(ext)s',
+        'format': 'bestaudio/best',
         'nooverwrites': True,
         'sleep_interval': 2,
         'max_sleep_interval': 5, 
@@ -60,13 +61,10 @@ class download_config():
 def youtube_downloader(url):
     """ Downloads the audio from YouTube as per configuration for each URL with the corresponding filename """
 
-    try: 
-        options['format'] = 'm4a'
-        YouTubeDL = youtube_dl.YoutubeDL(options)
-        YouTubeDL.download([url])
-    except:
-        options['format'] = 'bestaudio/best'
-        YouTubeDL = youtube_dl.YoutubeDL(options)
+    YouTubeDL = youtube_dl.YoutubeDL(options)
+    video_info = YouTubeDL.extract_info(url, download=False)
+
+    if f"{video_info['title']} - {video_info['id']}.mp3" not in os.listdir('train'):
         YouTubeDL.download([url])
 
 def parallel_compute(download_list):
@@ -81,7 +79,6 @@ def parallel_compute(download_list):
 df = pd.read_csv(download_config.input_file)
 
 start_from, stop_at, options = download_config.start_from(df), download_config.stop_at(df), download_config.options
-YouTubeDL = youtube_dl.YoutubeDL(options)
 download_list = [download['Video Link'] for download in df.iloc[start_from:stop_at].to_dict('records') if download['[1] Start Time'] == download['[1] Start Time']]
 
 if len(download_list) > 0: 
