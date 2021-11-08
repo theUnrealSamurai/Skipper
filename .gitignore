@@ -130,5 +130,8 @@ dmypy.json
 
 
 #Ignoring the training data
-
 data/train/
+
+#vscode crap
+
+.vscode/
