@@ -15,7 +15,7 @@ class FetchAudio(Dataset):
 
 		super(FetchAudio, self).__init__()
 		self.audio_paths = glob(path_to_dir + "/*.mp3")
-		self.df = pd.read_csv(path_to_csv, index_col="Video_id")
+		self.df = pd.read_csv(path_to_csv, index_col="video_id")
 		self.SAMPLE_RATE = SAMPLE_RATE
 		self.transformation = torchaudio.transforms.MelSpectrogram(
 			sample_rate=SAMPLE_RATE,
@@ -42,4 +42,13 @@ class FetchAudio(Dataset):
 
 		mel_spectrogram = self.transformation(signal)
 
-		return mel_spectrogram[0]
+		return {"spectrogram": mel_spectrogram[0], 
+				"start_seconds": self.df.loc[audio_id].start_seconds,
+				"end_seconds": self.df.loc[audio_id].end_seconds,
+				"time_difference": self.df.loc[audio_id].time_diff
+				}
+
+
+if __name__ == "__main__":
+	dset = FetchAudio()
+	print(dset[0])
