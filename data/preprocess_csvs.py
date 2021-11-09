@@ -2,12 +2,13 @@ import pandas as pd
 from glob import glob
 
 
+def str_to_sec(time):
+	a, b = time.split(":")
+	return (int(a)*60) + int(b)
+
 def time_difference(start, end):
 	"""Returns the time difference between 2 times.
 	Start and end should be string formatted in mm:ss"""
-	def str_to_sec(time):
-		a, b = time.split(":")
-		return (int(a)*60) + int(b)
 	start = start.apply(str_to_sec)
 	end = end.apply(str_to_sec)
 	return end-start
@@ -19,8 +20,11 @@ def preprocess(df_path):
 	df = df[["Video Link", "[1] Start Time", "[1] End Time"]]
 	df.dropna(inplace=True)
 	#  Any new feature to be added goes here in this function.
-	df["time_diff"] = time_difference(df["[1] Start Time"], df["[1] End Time"])
-	df["Video_id"] = df["Video Link"].apply(lambda x: x.split('=')[-1])
+	
+	df["start_seconds"] = df["[1] Start Time"].apply(str_to_sec)
+	df["end_seconds"] = df["[1] End Time"].apply(str_to_sec)
+	df["time_diff"] = df["end_seconds"] - df["start_seconds"]
+	df["video_id"] = df["Video Link"].apply(lambda x: x.split('=')[-1])
 	return df
 
 
