@@ -6,13 +6,6 @@ def str_to_sec(time):
 	a, b = time.split(":")
 	return (int(a)*60) + int(b)
 
-def time_difference(start, end):
-	"""Returns the time difference between 2 times.
-	Start and end should be string formatted in mm:ss"""
-	start = start.apply(str_to_sec)
-	end = end.apply(str_to_sec)
-	return end-start
-
 
 def preprocess(df_path):
 	"""Dropping the empty rows and a little Feature Engineering"""
