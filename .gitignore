@@ -135,3 +135,5 @@ data/train/
 #vscode crap
 
 .vscode/
+#thedataset
+/data/sponsorTimes_1636694165541.csv
