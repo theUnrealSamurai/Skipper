@@ -130,6 +130,10 @@ dmypy.json
 
 
 #Ignoring the training data
-
 data/train/
-.vscode/launch.json
+
+# VS Code Crap
+.vscode/
+
+# Dataset
+/data/sponsorTimes_1636694165541.csv
