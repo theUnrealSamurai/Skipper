@@ -51,4 +51,4 @@ class FetchAudio(Dataset):
 
 if __name__ == "__main__":
 	dset = FetchAudio()
-	print(dset[0])
+	print(dset[0])		
