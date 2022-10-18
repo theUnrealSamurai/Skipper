@@ -7,7 +7,7 @@ sponsor_times = pd.read_csv("drive/MyDrive/sponsorTimes.csv")
 transcripts = os.listdir("drive/MyDrive/transcripts")
 
 
-### Filtering the videos for which transcripts and  sponsor times are available ###
+# Filtering the videos for which transcripts and  sponsor times are available
 
 transcripted_videoIDs = set([filename.strip(".json") for filename in transcripts])
 sponsored_videoIDs = set(sponsor_times["videoID"])
@@ -16,7 +16,7 @@ transcripted_sponsored_videoIDs = list(sponsored_videoIDs.intersection(transcrip
 transcripted_sponsor_times = sponsor_times[sponsor_times["videoID"].isin(transcripted_sponsored_videoIDs)]
 
 
-### Filtering sponsor times to have a single best submission instead of repeated submissions for a sponsor on a video ###
+# Filtering sponsor times to have a single best submission instead of repeated submissions for a sponsor on a video
 
 unique_videoID = transcripted_sponsor_times["videoID"].unique()
 
@@ -63,10 +63,11 @@ for videoID in unique_videoID:
         start_time = round(transcripted_sponsor_times["startTime"][index])
         end_time = round(transcripted_sponsor_times["endTime"][index])
         
-        sponsor_transcript_for_video.append("".join(transcript[(transcript['start'] >= start_time) & (transcript['start'] < end_time)]['text']).replace("\n", " "))
-
-    transcript_item['sponsorTranscripts'] = sponsor_transcript_for_video
+        transcript.drop(transcript[(transcript['start'] >= start_time) & (transcript['start'] < end_time)].index, inplace=True)
+    
+    sponsor_transcript_for_video.append("".join(transcript['text']).replace("\n", " "))
+    transcript_item['unsponsoredTranscripts'] = sponsor_transcript_for_video
     sponsor_transcripts.append(transcript_item)    
 
-with open("sponsor_transcripts.json", "w") as json_file:
+with open("unsponsored_transcripts.json", "w") as json_file:
     json.dump(sponsor_transcripts, json_file)
